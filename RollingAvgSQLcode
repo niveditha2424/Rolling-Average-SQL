@@ -1,0 +1,11 @@
+SELECT t_date AS transaction_date,
+SUM(t_amt) OVER (ORDER BY t_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)  / SUM(t_count) OVER (ORDER BY t_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rol_avg
+FROM
+(SELECT 
+    transaction_time::date AS t_date,
+    SUM(transaction_amount) AS t_amt,
+    COUNT(*) AS t_count
+FROM
+	transactions
+GROUP BY
+	transaction_time::date) as t1;
